@@ -9,4 +9,4 @@ Semester: Fall 2026
 ##Skills
 - Git
 - R
-
+- Tableau
