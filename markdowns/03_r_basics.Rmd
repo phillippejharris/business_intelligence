@@ -1,0 +1,45 @@
+---
+title: "Class 03 - R Basics"
+author: "Jontae"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    code_download: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Cincy Crash Data
+
+```{r cincy_crashes}
+crashes_per_day = 30125 / 365
+crashes_per_day 
+
+crashes_by_day = c(2020, 2241, 2327, 2285,
+                   2380, 1866, 1664)
+names(crashes_by_day) = c("Mon", "Tue", "Wed", "Thu",
+                          "Fri", "Sat", "Sun")
+crashes_by_day
+
+crashes_by_day > 2100
+```
+
+## Type of `crashes_by_day`
+
+```{r typeof_vec}
+typeof(crashes_by_day)
+
+crashes_by_day_int = c(2020L, 2241L, 2327L, 2285L, 2380L, 1866L, 1664L)
+names(crashes_by_day_int) = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+
+typeof(crashes_by_day_int)
+
+```
+
