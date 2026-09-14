@@ -11,9 +11,9 @@
 
 <meta name="author" content="Jontae Harris" />
 
-<meta name="date" content="2026-09-09" />
+<meta name="date" content="2026-09-14" />
 
-<title>Class0 5.Rmd</title>
+<title>Class06.Rmd</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1599,175 +1599,62 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">Class0 5.Rmd</h1>
+<h1 class="title toc-ignore">Class06.Rmd</h1>
 <h4 class="author">Jontae Harris</h4>
-<h4 class="date">2026-09-09</h4>
+<h4 class="date">2026-09-14</h4>
 
 </div>
 
 
-<div id="game-01-subsetting-lists" class="section level2">
-<h2>Game 01: Subsetting Lists</h2>
-<pre class="r"><code>campus = jsonlite::fromJSON(&quot;https://isa401-find-your-seat.vercel.app/campus.json&quot;)
-  
-  
-names(campus) # shows the named elements within a list (or vector)  or the cols in a data frame</code></pre>
-<pre><code>## [1] &quot;briefing&quot; &quot;Yager&quot;    &quot;Millett&quot;  &quot;Upham&quot;    &quot;Farmer&quot;   &quot;King&quot;</code></pre>
-<pre class="r"><code>fsb = campus$Farmer# saving the named farmer list in FSB
-# equivalent campus [[&#39;Farmer]] by name or campus[[$]] by position
-fsb$code</code></pre>
-<pre><code>## [1] &quot;MUFSB&quot;</code></pre>
-<pre class="r"><code>names(fsb[[8]]) # fsbfloors</code></pre>
-<pre><code>## [1] &quot;0&quot; &quot;1&quot; &quot;2&quot; &quot;3&quot;</code></pre>
-<pre class="r"><code>fsb[[8]][[3]] # by position</code></pre>
-<pre><code>## $level
-## [1] &quot;2&quot;
-## 
-## $feature
-## [1] &quot;The two instructional computer labs, rooms 2037 and 2050 (plus the FSB IT office in 2036)&quot;
-## 
-## $rooms
-##   room isa_sections all_sections all_subjects
-## 1 2037           10           12            2
-## 2 2040            0           12            1
-## 3 2041            0           13            2
-## 4 2046            0           16            2
-## 5 2049            0           16            3
-## 6 2050           11           11            1
-## 
-## $sections
-## [1] 80
-## 
-## $classes
-##     course section                          title days           times room
-## 1  ISA 303       A             Enterprise Systems   TR  11:40am-1:00pm 2037
-## 2  ISA 444       A           Business Forecasting   TR   2:50pm-4:10pm 2037
-## 3  ISA 491       A        Data Mining in Business   TR   1:15pm-2:35pm 2037
-## 4  ISA 514       A              Managing Big Data   MW  11:40am-1:00pm 2037
-## 5  ISA 514       B              Managing Big Data   MW   1:15pm-2:35pm 2037
-## 6  ISA 544       A           Business Forecasting   TR   2:50pm-4:10pm 2037
-## 7  ISA 591       A        Data Mining in Business   MW   8:30am-9:50am 2037
-## 8  ISA 591       B        Data Mining in Business   MW 10:05am-11:25am 2037
-## 9  ISA 612       A Advanced Business Intelligence   TR   8:30am-9:50am 2037
-## 10 ISA 612       B Advanced Business Intelligence   TR 10:05am-11:25am 2037
-## 11 ISA 321       B Optimization in Bus. Analytics   TR   8:30am-9:50am 2050
-## 12 ISA 345       A               Database Systems   TR   1:15pm-2:35pm 2050
-## 13 ISA 345       B               Database Systems   TR   2:50pm-4:10pm 2050
-## 14 ISA 381       B           Business Programming   MW   2:50pm-4:10pm 2050
-## 15 ISA 381       C           Business Programming   MW   4:25pm-5:45pm 2050
-## 16 ISA 401       A        BI &amp; Data Visualization   MW   8:30am-9:50am 2050
-## 17 ISA 401       B        BI &amp; Data Visualization   MW 10:05am-11:25am 2050
-## 18 ISA 414       A              Managing Big Data   MW  11:40am-1:00pm 2050
-## 19 ISA 414       C              Managing Big Data   MW   1:15pm-2:35pm 2050
-## 20 ISA 634       A        Modeling &amp; Optimization   TR 10:05am-11:25am 2050
-## 21 ISA 634       B        Modeling &amp; Optimization   TR  11:40am-1:00pm 2050</code></pre>
-<pre class="r"><code>fsb[[8]]$`2` # by name </code></pre>
-<pre><code>## $level
-## [1] &quot;2&quot;
-## 
-## $feature
-## [1] &quot;The two instructional computer labs, rooms 2037 and 2050 (plus the FSB IT office in 2036)&quot;
-## 
-## $rooms
-##   room isa_sections all_sections all_subjects
-## 1 2037           10           12            2
-## 2 2040            0           12            1
-## 3 2041            0           13            2
-## 4 2046            0           16            2
-## 5 2049            0           16            3
-## 6 2050           11           11            1
-## 
-## $sections
-## [1] 80
-## 
-## $classes
-##     course section                          title days           times room
-## 1  ISA 303       A             Enterprise Systems   TR  11:40am-1:00pm 2037
-## 2  ISA 444       A           Business Forecasting   TR   2:50pm-4:10pm 2037
-## 3  ISA 491       A        Data Mining in Business   TR   1:15pm-2:35pm 2037
-## 4  ISA 514       A              Managing Big Data   MW  11:40am-1:00pm 2037
-## 5  ISA 514       B              Managing Big Data   MW   1:15pm-2:35pm 2037
-## 6  ISA 544       A           Business Forecasting   TR   2:50pm-4:10pm 2037
-## 7  ISA 591       A        Data Mining in Business   MW   8:30am-9:50am 2037
-## 8  ISA 591       B        Data Mining in Business   MW 10:05am-11:25am 2037
-## 9  ISA 612       A Advanced Business Intelligence   TR   8:30am-9:50am 2037
-## 10 ISA 612       B Advanced Business Intelligence   TR 10:05am-11:25am 2037
-## 11 ISA 321       B Optimization in Bus. Analytics   TR   8:30am-9:50am 2050
-## 12 ISA 345       A               Database Systems   TR   1:15pm-2:35pm 2050
-## 13 ISA 345       B               Database Systems   TR   2:50pm-4:10pm 2050
-## 14 ISA 381       B           Business Programming   MW   2:50pm-4:10pm 2050
-## 15 ISA 381       C           Business Programming   MW   4:25pm-5:45pm 2050
-## 16 ISA 401       A        BI &amp; Data Visualization   MW   8:30am-9:50am 2050
-## 17 ISA 401       B        BI &amp; Data Visualization   MW 10:05am-11:25am 2050
-## 18 ISA 414       A              Managing Big Data   MW  11:40am-1:00pm 2050
-## 19 ISA 414       C              Managing Big Data   MW   1:15pm-2:35pm 2050
-## 20 ISA 634       A        Modeling &amp; Optimization   TR 10:05am-11:25am 2050
-## 21 ISA 634       B        Modeling &amp; Optimization   TR  11:40am-1:00pm 2050</code></pre>
-<pre class="r"><code>fsb[[8]]$&#39;2&#39;$sections</code></pre>
-<pre><code>## [1] 80</code></pre>
-<pre class="r"><code>sec_floor = fsb[[8]]$`2`
-
-sec_floor_rooms = sec_floor[[3]]
-sec_floor_rooms[6, 2] # by position </code></pre>
-<pre><code>## [1] 11</code></pre>
-<pre class="r"><code>sec_floor_rooms[6, &#39;isa_sections&#39;] # by name</code></pre>
-<pre><code>## [1] 11</code></pre>
-</div>
-<div id="reading-the-exce-file" class="section level2">
-<h2>Reading the Exce File</h2>
-<pre class="r"><code>occupation = readxl::read_excel(
-  path = &quot;../data/occupation.xlsx&quot;, 
-  sheet = 5, # sheet = &quot;Table 1.4&quot; 
-  skip = 1
-)
-# - when you subset in R drops these specific things
-# given that they are three, i put them in a vector 
-# notice the &quot;,&quot; after the parantheses
-# nothing after the comma which means all columns
-# instead of that space --&gt; 1:7 
-occupation = occupation[-c(32, 33, 34), ]
-
-# alternatively 
-occupation = occupation[1:31, ]</code></pre>
-</div>
-<div id="read-json-data" class="section level2">
-<h2>Read JSON Data</h2>
-<pre class="r"><code>json_url = &quot;https://data.cincinnati-oh.gov/resource/rvmt-pkmq.json?$limit=100&quot;
-
-crashes_json = jsonlite::fromJSON(json_url)
-dplyr::glimpse(
-  crashes_json[, c(&quot;crashdate&quot;, &quot;dayofweek&quot;,
-                   &quot;crashseverity&quot;, &quot;age&quot;)])</code></pre>
-<pre><code>## Rows: 100
-## Columns: 4
-## $ crashdate     &lt;chr&gt; &quot;2026-08-22T22:29:00.000&quot;, &quot;2026-08-22T22:29:00.000&quot;, &quot;2…
-## $ dayofweek     &lt;chr&gt; &quot;SAT&quot;, &quot;SAT&quot;, &quot;SAT&quot;, &quot;SAT&quot;, &quot;SAT&quot;, &quot;SAT&quot;, &quot;SAT&quot;, &quot;SAT&quot;, …
-## $ crashseverity &lt;chr&gt; &quot;3 - MINOR INJURY SUSPECTED&quot;, &quot;3 - MINOR INJURY SUSPECTE…
-## $ age           &lt;chr&gt; &quot;20&quot;, &quot;48&quot;, &quot;38&quot;, NA, &quot;27&quot;, NA, &quot;83&quot;, NA, NA, NA, &quot;21&quot;, …</code></pre>
-</div>
-<div id="game-02" class="section level2">
-<h2>Game 02</h2>
-<pre class="r"><code>logins = readr::read_csv(&quot;https://isa401-import-heist.vercel.app/api/stage1&quot;)</code></pre>
-<pre><code>## Rows: 7 Columns: 6
+<p>#HW 04</p>
+<pre class="r"><code>con = DBI::dbConnect(RSQLite::SQLite(), &quot;../data/midwest_airbnb.db&quot;)
+listings = DBI::dbReadTable(con, &quot;listings&quot;)</code></pre>
+<div id="kahoot-02" class="section level1">
+<h1>Kahoot 02</h1>
+<pre class="r"><code>run = readr::read_csv(&quot;https://isa401-find-your-seat.vercel.app/api/export?section=A&amp;run=13&quot;)</code></pre>
+<pre><code>## Rows: 157 Columns: 10
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
-## chr  (4): account, country, source_ip, mfa
-## dbl  (1): failed_attempts
-## dttm (1): sign_in_time
+## chr  (5): section, track, seat, table, level_name
+## dbl  (4): run, level, seconds, rank
+## dttm (1): reached_at
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>log = jsonlite::fromJSON(&quot;https://isa401-import-heist.vercel.app/api/stage2?key=ACCOUNT&quot;)
-events_df = log$events # 6 files were dowloaded 
-jsonlite::fromJSON(&quot;https://isa401-import-heist.vercel.app/api/finish?code=NUMBER&quot;)</code></pre>
-<pre><code>## $status
-## [1] &quot;WRONG_CODE&quot;
-## 
-## $hint
-## [1] &quot;The code is a number: https://isa401-import-heist.vercel.app/api/finish?code=NUMBER. To find it in R: log$events is a data frame, and log$events$action is its action column. The comparison log$events$action == \&quot;DOWNLOAD\&quot; gives TRUE for every download, and sum() of those TRUEs is your count.&quot;</code></pre>
+<pre class="r"><code>dplyr::glimpse(run)</code></pre>
+<pre><code>## Rows: 157
+## Columns: 10
+## $ section    &lt;chr&gt; &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;, &quot;A&quot;,…
+## $ run        &lt;dbl&gt; 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,…
+## $ track      &lt;chr&gt; &quot;opener&quot;, &quot;opener&quot;, &quot;opener&quot;, &quot;opener&quot;, &quot;opener&quot;, &quot;opener&quot;,…
+## $ seat       &lt;chr&gt; &quot;R2-5&quot;, &quot;L1-2&quot;, &quot;L2-3&quot;, &quot;R3-6&quot;, &quot;L2-2&quot;, &quot;R1-1&quot;, &quot;L1-7&quot;, &quot;R3…
+## $ table      &lt;chr&gt; &quot;R2&quot;, &quot;L1&quot;, &quot;L2&quot;, &quot;R3&quot;, &quot;L2&quot;, &quot;R1&quot;, &quot;L1&quot;, &quot;R3&quot;, &quot;L3&quot;, &quot;R1&quot;,…
+## $ level      &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ level_name &lt;chr&gt; &quot;seat picked&quot;, &quot;seat picked&quot;, &quot;seat picked&quot;, &quot;seat picked&quot;,…
+## $ reached_at &lt;dttm&gt; 2026-09-09 12:26:18, 2026-09-09 12:35:06, 2026-09-09 12:35…
+## $ seconds    &lt;dbl&gt; 0, 529, 534, 540, 541, 547, 548, 550, 550, 551, 552, 554, 5…
+## $ rank       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…</code></pre>
+</div>
+<div id="scout-data" class="section level1">
+<h1>Scout Data</h1>
+<pre class="r"><code>con = DBI::dbConnect(RSQLite::SQLite(),
+                     &quot;../data/scout.db&quot;)
+DBI::dbListTables(con)</code></pre>
+<pre><code>## [1] &quot;scout_postings&quot; &quot;scout_runs&quot;</code></pre>
+<pre class="r"><code>postings = DBI::dbReadTable(con, &quot;scout_postings&quot;)
+DBI::dbDisconnect(con)
+dplyr::glimpse(postings[, c(&quot;title&quot;, &quot;company&quot;,
+  &quot;location_state&quot;, &quot;remote&quot;, &quot;skills_json&quot;)])</code></pre>
+<pre><code>## Rows: 1,891
+## Columns: 5
+## $ title          &lt;chr&gt; &quot;Data Analyst - Remote&quot;, &quot;Business Analyst / Product Ow…
+## $ company        &lt;chr&gt; &quot;UnitedHealth Group&quot;, &quot;Anza Mortgage Insurance Corporat…
+## $ location_state &lt;chr&gt; &quot;GA&quot;, &quot;NC&quot;, &quot;TX&quot;, &quot;CA&quot;, &quot;TX&quot;, &quot;NC&quot;, &quot;IL&quot;, &quot;GA&quot;, &quot;IN&quot;, &quot;…
+## $ remote         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0…
+## $ skills_json    &lt;chr&gt; &quot;[{\&quot;skillId\&quot;:\&quot;sql\&quot;,\&quot;importance\&quot;:\&quot;required\&quot;},{\&quot;…</code></pre>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNsYXNzMCA1LlJtZCINCmF1dGhvcjogIkpvbnRhZSBIYXJyaXMiDQpkYXRlOiAiMjAyNi0wOS0wOSINCm91dHB1dDogDQogIGh0bWxfZG9jdW1lbnQ6DQogICAgdG9jOiB0cnVlDQogICAgdG9jX2Zsb2F0OiB0cnVlDQogICAgbnVtYmVyZWRfc2VjdGlvbjogdHJ1ZQ0KICAgIGNvZGVfZG93bmxvYWQ6IHRydWUNCiAgICBjb2RlX2ZvbGRpbmc6IHNob3cNCiAgICB0aGVtZTogc2ltcGxlDQotLS0NCg0KYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9DQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpgYGANCg0KIyMgR2FtZSAwMTogU3Vic2V0dGluZyBMaXN0cw0KDQpgYGB7ciBnYW1lMDF9DQpjYW1wdXMgPSBqc29ubGl0ZTo6ZnJvbUpTT04oImh0dHBzOi8vaXNhNDAxLWZpbmQteW91ci1zZWF0LnZlcmNlbC5hcHAvY2FtcHVzLmpzb24iKQ0KICANCiAgDQpuYW1lcyhjYW1wdXMpICMgc2hvd3MgdGhlIG5hbWVkIGVsZW1lbnRzIHdpdGhpbiBhIGxpc3QgKG9yIHZlY3RvcikgIG9yIHRoZSBjb2xzIGluIGEgZGF0YSBmcmFtZQ0KZnNiID0gY2FtcHVzJEZhcm1lciMgc2F2aW5nIHRoZSBuYW1lZCBmYXJtZXIgbGlzdCBpbiBGU0INCiMgZXF1aXZhbGVudCBjYW1wdXMgW1snRmFybWVyXV0gYnkgbmFtZSBvciBjYW1wdXNbWyRdXSBieSBwb3NpdGlvbg0KZnNiJGNvZGUNCg0KDQpuYW1lcyhmc2JbWzhdXSkgIyBmc2JmbG9vcnMNCmZzYltbOF1dW1szXV0gIyBieSBwb3NpdGlvbg0KZnNiW1s4XV0kYDJgICMgYnkgbmFtZSANCg0KZnNiW1s4XV0kJzInJHNlY3Rpb25zDQpzZWNfZmxvb3IgPSBmc2JbWzhdXSRgMmANCg0Kc2VjX2Zsb29yX3Jvb21zID0gc2VjX2Zsb29yW1szXV0NCnNlY19mbG9vcl9yb29tc1s2LCAyXSAjIGJ5IHBvc2l0aW9uIA0Kc2VjX2Zsb29yX3Jvb21zWzYsICdpc2Ffc2VjdGlvbnMnXSAjIGJ5IG5hbWUNCmBgYA0KDQoNCg0KIyMgUmVhZGluZyB0aGUgRXhjZSBGaWxlDQoNCmBgYHtyIG9jY3VwYXRpb25zfQ0Kb2NjdXBhdGlvbiA9IHJlYWR4bDo6cmVhZF9leGNlbCgNCiAgcGF0aCA9ICIuLi9kYXRhL29jY3VwYXRpb24ueGxzeCIsIA0KICBzaGVldCA9IDUsICMgc2hlZXQgPSAiVGFibGUgMS40IiANCiAgc2tpcCA9IDENCikNCiMgLSB3aGVuIHlvdSBzdWJzZXQgaW4gUiBkcm9wcyB0aGVzZSBzcGVjaWZpYyB0aGluZ3MNCiMgZ2l2ZW4gdGhhdCB0aGV5IGFyZSB0aHJlZSwgaSBwdXQgdGhlbSBpbiBhIHZlY3RvciANCiMgbm90aWNlIHRoZSAiLCIgYWZ0ZXIgdGhlIHBhcmFudGhlc2VzDQojIG5vdGhpbmcgYWZ0ZXIgdGhlIGNvbW1hIHdoaWNoIG1lYW5zIGFsbCBjb2x1bW5zDQojIGluc3RlYWQgb2YgdGhhdCBzcGFjZSAtLT4gMTo3IA0Kb2NjdXBhdGlvbiA9IG9jY3VwYXRpb25bLWMoMzIsIDMzLCAzNCksIF0NCg0KIyBhbHRlcm5hdGl2ZWx5IA0Kb2NjdXBhdGlvbiA9IG9jY3VwYXRpb25bMTozMSwgXQ0KYGBgDQoNCiMjIFJlYWQgSlNPTiBEYXRhDQoNCmBgYHtyIHJlYWRfSlNPTn0NCmpzb25fdXJsID0gImh0dHBzOi8vZGF0YS5jaW5jaW5uYXRpLW9oLmdvdi9yZXNvdXJjZS9ydm10LXBrbXEuanNvbj8kbGltaXQ9MTAwIg0KDQpjcmFzaGVzX2pzb24gPSBqc29ubGl0ZTo6ZnJvbUpTT04oanNvbl91cmwpDQpkcGx5cjo6Z2xpbXBzZSgNCiAgY3Jhc2hlc19qc29uWywgYygiY3Jhc2hkYXRlIiwgImRheW9md2VlayIsDQogICAgICAgICAgICAgICAgICAgImNyYXNoc2V2ZXJpdHkiLCAiYWdlIildKQ0KYGBgDQoNCg0KIyMgR2FtZSAwMiANCmBgYHtyfQ0KDQpgYGANCg0KYGBge3J9DQpsb2dpbnMgPSByZWFkcjo6cmVhZF9jc3YoImh0dHBzOi8vaXNhNDAxLWltcG9ydC1oZWlzdC52ZXJjZWwuYXBwL2FwaS9zdGFnZTEiKQ0KDQpsb2cgPSBqc29ubGl0ZTo6ZnJvbUpTT04oImh0dHBzOi8vaXNhNDAxLWltcG9ydC1oZWlzdC52ZXJjZWwuYXBwL2FwaS9zdGFnZTI/a2V5PUFDQ09VTlQiKQ0KZXZlbnRzX2RmID0gbG9nJGV2ZW50cyAjIDYgZmlsZXMgd2VyZSBkb3dsb2FkZWQgDQpqc29ubGl0ZTo6ZnJvbUpTT04oImh0dHBzOi8vaXNhNDAxLWltcG9ydC1oZWlzdC52ZXJjZWwuYXBwL2FwaS9maW5pc2g/Y29kZT1OVU1CRVIiKQ0KDQpgYGANCg0KDQoNCg0KDQoNCg0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNsYXNzMDYuUm1kIg0KYXV0aG9yOiAiSm9udGFlIEhhcnJpcyINCmRhdGU6ICIyMDI2LTA5LTE0Ig0Kb3V0cHV0OiANCiAgaHRtbF9kb2N1bWVudDoNCiAgICB0b2M6IHRydWUNCiAgICB0b2NfZmxvYXQ6IHRydWUNCiAgICBudW1iZXJlZF9zZWN0aW9uOiB0cnVlDQogICAgY29kZV9kb3dubG9hZDogdHJ1ZQ0KICAgIGNvZGVfZm9sZGluZzogc2hvdw0KICAgIHRoZW1lOiBzaW1wbGUNCi0tLQ0KDQoNCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFfQ0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQ0KYGBgDQoNCiNIVyAwNA0KYGBge3IgaHcwNH0NCmNvbiA9IERCSTo6ZGJDb25uZWN0KFJTUUxpdGU6OlNRTGl0ZSgpLCAiLi4vZGF0YS9taWR3ZXN0X2FpcmJuYi5kYiIpDQpsaXN0aW5ncyA9IERCSTo6ZGJSZWFkVGFibGUoY29uLCAibGlzdGluZ3MiKQ0KYGBgDQoNCg0KIyBLYWhvb3QgMDIgDQoNCmBgYHtyfQ0KcnVuID0gcmVhZHI6OnJlYWRfY3N2KCJodHRwczovL2lzYTQwMS1maW5kLXlvdXItc2VhdC52ZXJjZWwuYXBwL2FwaS9leHBvcnQ/c2VjdGlvbj1BJnJ1bj0xMyIpDQpkcGx5cjo6Z2xpbXBzZShydW4pDQpgYGANCg0KIyBTY291dCBEYXRhDQpgYGB7cn0NCmNvbiA9IERCSTo6ZGJDb25uZWN0KFJTUUxpdGU6OlNRTGl0ZSgpLA0KICAgICAgICAgICAgICAgICAgICAgIi4uL2RhdGEvc2NvdXQuZGIiKQ0KREJJOjpkYkxpc3RUYWJsZXMoY29uKQ0KcG9zdGluZ3MgPSBEQkk6OmRiUmVhZFRhYmxlKGNvbiwgInNjb3V0X3Bvc3RpbmdzIikNCkRCSTo6ZGJEaXNjb25uZWN0KGNvbikNCmRwbHlyOjpnbGltcHNlKHBvc3RpbmdzWywgYygidGl0bGUiLCAiY29tcGFueSIsDQogICJsb2NhdGlvbl9zdGF0ZSIsICJyZW1vdGUiLCAic2tpbGxzX2pzb24iKV0pDQpgYGANCg0K</div>
 
 
 </div>
@@ -1805,7 +1692,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("05_markdowns.Rmd");
+  window.initializeSourceEmbed("06_class 6.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
