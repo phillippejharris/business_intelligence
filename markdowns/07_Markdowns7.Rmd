@@ -95,25 +95,8 @@ listings |>
   dplyr::group_by(city) |> 
   dplyr:: summarise(
     median_price = median(price)
-  ) -> q2
+  )
   
-# 3. Add price_per_person = price / accommodates. Which three listings are cheapest per person? Believe them?
-
-listings |> 
-  dplyr::mutate(price_per_person = price / accommodates)|> 
-  # for the sake of printing nicely, I will reduce the number of cols
-  dplyr::select(city, host_name, name, price, accommodates, price_per_person) |>
-  dplyr:: arrange(price_per_person)
-  tail(3)
-
-  
-# which five host_names have the most listings? [FYI -- host names are not unique]
-#host_ids are
-  
-listings |> dplyr::count(host_name, sort = T)  
-# the line below groups by both host_name and host_id (to attempt to find unique host)
-# -- this is the gist of the question but both answers would have been considered correct on an exam give the way I framed the question 
-listings |> dplyr::count(host_name, host_id, sort = T)  
 
 ```
 
