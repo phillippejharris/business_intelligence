@@ -19,9 +19,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #HW 04
 ```{r hw04}
-con = DBI::dbConnect(RSQLite::SQLite(), "../data/midwest_airbnb.db")
-listings = DBI::dbReadTable(con, "listings")
+con = DBI::dbConnect(RSQLite::SQLite(), "data/midwest_airbnb.db")
+listings = DBI::dbReadTable(con, "listings") 
+
+dplyr::glimpse(listings)
+
+library(dplyr)
+
+listings |> 
+  filter(city == "Columbus") |> 
+  nrow()
+
 ```
+
 
 
 # Kahoot 02 
