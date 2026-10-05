@@ -29,7 +29,28 @@ library(dplyr)
 listings |> 
   filter(city == "Columbus") |> 
   nrow()
+library(dplyr)
 
+listings |>
+  filter(city == "Chicago") |>
+  arrange(desc(price)) |>
+  select(name, price) |>
+  head(5) 
+
+chicago <- subset(listings, city == "Chicago")
+chicago[which.max(chicago$price), c("name", "price")]
+
+listings |>
+  filter(city == "Chicago") |> 
+  summarise(n_distinct(neighbourhood))
+
+listings |> 
+  filter(host_is_superhost == "t") |>
+  nrow()
+
+listings %>%
+  filter(price > 1000) %>%
+  nrow()
 ```
 
 
@@ -51,4 +72,48 @@ DBI::dbDisconnect(con)
 dplyr::glimpse(postings[, c("title", "company",
   "location_state", "remote", "skills_json")])
 ```
+
+## Assignment 05
+
+```{r}
+con = DBI::dbConnect(RSQLite::SQLite(), "data/midwest_airbnb.db")
+
+client = ellmer::chat_openai(
+  model = "gpt-5.6-luna",
+  params = ellmer::params(reasoning_effort = "none")
+)
+
+qc = querychat::querychat(
+  con, "listings",
+  client           = client,
+  tools            = c("filter", "query", "visualize"),
+  greeting         = "Ask me about 14,887 Airbnb listings in Chicago, Columbus, and the Twin Cities.",
+  data_description = "data/data_desc.md",
+  extra_instructions = "data/extra_instructions.md"
+)
+
+qc$app()
+
+
+# Example for an API client function
+client = usa_jobs_client(
+  api_key = Sys.getenv("USA_JOBS_API_KEY")
+)
+
+library(httr2)
+
+req = request("https://data.usajobs.gov/api/search") |>
+  req_headers(
+    `Authorization-Key` = Sys.getenv("USA_JOBS_API_KEY"),
+    `User-Agent`        = "your_email@example.com"
+  )
+
+client = ellmer::chat_openai(
+  model   = "gpt-5.6-luna",
+  api_key = Sys.getenv("OPENAI_API_KEY"),
+  params  = ellmer::params(reasoning_effort = "none")
+)
+```
+
+
 
