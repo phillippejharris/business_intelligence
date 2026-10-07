@@ -1,22 +1,16 @@
-# ISA 401 Job Scout Chat
+# Midwest Airbnb Chat
 
 **Ask a question in plain English, get the SQL and a table back**
 
-A twelve-line [querychat](https://github.com/posit-dev/querychat) app built in ISA 401 (Miami University) on the job postings that [ChatISA](https://chatisa.fsb.miamioh.edu) Job Scout collected. It is the starting point for Assignment 05, where you rebuild it on the Airbnb data, deploy it to [Render](https://render.com) from your GitHub repository, and then improve it.
+A querychat app built for Midwest Airbnb listings.
 
-**Live app:** (paste your Render URL here once it is deployed, for example `https://job-scout-chat.onrender.com`)
+**Live app:** https://midwest-airbnb-chat-3bk2.onrender.com
 
 ---
 
 ## What is this app?
 
-The app connects to a SQLite database (`data/scout.db`), hands the `scout_postings` table to querychat, and lets an LLM translate your question into SQL. Every answer shows the query it ran, so you can check the logic and reuse the SQL yourself.
-
-**Example queries:**
-- "How many of the postings are remote?"
-- "Which ten companies have the most postings?"
-- "Show the internship postings in Ohio."
-
+The app connects to a SQLite database (`data/midwest_airbnb.db`), hands the `listings` table to an LLM, and generates SQL queries to answer questions about 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities.
 ---
 
 ## Dataset Information
