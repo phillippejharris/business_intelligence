@@ -68,7 +68,7 @@ length(classes)   # check this first: one per card
 ## Stage 3 
 base = "https://isa401-salvage.vercel.app"
 starts = seq(from = 1, to = 351, by = 50)
-pages = vector("list", length(starts)) # intializing the list [Similar to initatiling the data frame (df)]
+pages = vector("list", length(starts)) # intializing the list [Similar to initialing the data frame (df)]
 for (i in seq_along(starts)) {
   pg = rvest::read_html(paste0(base, "/registry?start=", starts[i]))
   pages[[i]] = data.frame(
@@ -90,6 +90,66 @@ Dreadnought_df <- registry |>
   dplyr::filter(class == "Dreadnought")
 
 ```
+
+
+## ISA 125 Extraction
+
+```{r}
+chat = ellmer::chat_openai(
+  model = "gpt-5.6-luna"
+)
+
+isa125_courseblock = rvest::read_html("https://bulletin.miamioh.edu/courses-instruction/isa/") |> 
+  rvest::html_element("#sc_sccoursedescs > div:nth-child(1)") |> 
+  rvest::html_text2()
+
+
+chat$chat_structured(
+isa125_courseblock,
+type = ellmer::type_object(
+# code is the name of the first element in the returned sub-list 
+# type_string -> forces that element or be of type chr
+  code = ellmer::type_string( 
+    description = " The three letter abbreviation for the course and its number. For example, ISA 999 or FIN 444"), 
+  name = ellmer::type_string( "The title of the course without the three letter abbreviation and the number. For example, Intoduction to Macroeconomics. Does not return a period after the name"), 
+  cr_hr = ellmer::type_integer(description = "The number of credits shown in parantheses after the course code and title")
+))
+
+```
+
+
+## All 50 ISA Courses
+
+```{r all_isa_courses}
+course_vec= rvest::read_html("https://bulletin.miamioh.edu/courses-instruction/isa/") |> 
+  rvest::html_elements(".courseblock") |> rvest::html_text2()
+
+# Similar to https://ellmer.tidyverse.org/articles/structured-data.html
+course_list = as.list(course_vec)
+
+type_course =  ellmer::type_object(
+# code is the name of the first element in the returned sub-list 
+# type_string -> forces that element or be of type chr
+  code = ellmer::type_string( 
+    description = " The three letter abbreviation for the course and its number. For example, ISA 999 or FIN 444"), 
+  name = ellmer::type_string( "The title of the course without the three letter abbreviation and the number. For example, Intoduction to Macroeconomics. Does not return a period after the name"), 
+  cr_hr = ellmer::type_integer(description = "The number of credits shown in parantheses after the course code and title")
+)
+
+isa_df = ellmer::parallel_chat_structured(
+  chat, prompts = course_list, type = type_course, 
+  include_tokens = T, include_cost = T 
+)
+
+sum(isa_df$cost)
+```
+
+
+
+
+
+
+
 
 
 
