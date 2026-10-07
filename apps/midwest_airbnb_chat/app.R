@@ -20,4 +20,5 @@ qc = querychat::querychat(
   extra_instructions = "data/extra_instructions.md"
 )
 
+options(shiny.host = "0.0.0.0", shiny.port = as.integer(Sys.getenv("PORT", "7860")))
 qc$app()
