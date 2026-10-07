@@ -1,0 +1,44 @@
+---
+title: "Class 13"
+author: "Jontae Harris"
+date: "2026-10-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Plane Crash Example 
+<https://www.planecrashinfo.com/2025/2025.htm> 
+
+```{r tidy_tc_crashes}
+year = 2025
+
+crash_url = paste0('https://www.planecrashinfo.com/', year, '/', year, '.htm')
+
+crash_page <- rvest::read_html(crash_url, encoding = "ISO-8859-1")
+
+# What we learned last class is tha tif I were t read this as an HTML table, I haveno contorl on what goes into each column in the resulting data frame -- this makes cleanig it (extracting text from it more challenging) 
+
+crash_page |> 
+  rvest::html_elements("td:nth-child(1) > font > a") |> 
+  rvest::html_text2() -> dates 
+
+crash_page |> 
+  rvest::html_elements("td:nth-child(2) > font") |> 
+  rvest::html_text2() -> loc_op
+# Skipped col 3 exactly similar for the time purposes 
+
+crash_page |> 
+  rvest::html_elements("td:nth-child(4) > font") |> 
+  rvest::html_text2() -> fatalities
+
+df = data.frame(dates = dates, loc = loc_op[-1], fatalities = fatalities[-1]) |>
+  tidyr::separate(loc, into = c("location", "operator"), sep = "\n") |>
+  tidyr::separate(fatalities, into = c("plane_fatalities", "pass", "ground_fatalities"))
+# this is tidy but not technically correct 
+dplyr::glimpse(df) 
+
+```
+
