@@ -185,5 +185,58 @@ missing_avail <- listings |>
 
 dplyr::count(missing_avail)
 ```
- 
+
+
+```{r}
+## Question 11
+listings |> 
+  dplyr::filter(
+    room_type == "Entire home/apt",
+    !is.na(host_is_superhost),
+    host_is_superhost %in% c("t", "f")
+  ) |> 
+  dplyr::group_by(city, host_is_superhost) |> 
+  dplyr::summarize(med_price = median(price, na.rm = TRUE), .groups = "drop") |> 
+  tidyr::pivot_wider(names_from = host_is_superhost, values_from = med_price) |> 
+  dplyr::mutate(premium = t - f)
+```
+
+```{r}
+# A2 Shares across all cities
+a2_all <- listings |> 
+  dplyr::left_join(
+    listings |> 
+      dplyr::group_by(host_id) |> 
+      dplyr::summarize(n_listings = dplyr::n()),
+    by = "host_id"
+  ) |> 
+  dplyr::group_by(city) |> 
+  dplyr::summarize(a2_share = round(100 * mean(n_listings >= 10), 1))
+
+# A5 Shares across all cities
+a5_all <- listings |> 
+  dplyr::group_by(city) |> 
+  dplyr::arrange(dplyr::desc(estimated_revenue_l365d), .by_group = TRUE) |> 
+  dplyr::mutate(
+    rank = dplyr::row_number(),
+    cutoff = ceiling(0.10 * dplyr::n()),
+    is_top_10 = rank <= cutoff
+  ) |> 
+  dplyr::summarize(
+    a5_share = round(100 * (sum(estimated_revenue_l365d[is_top_10], na.rm = TRUE) / sum(estimated_revenue_l365d, na.rm = TRUE)), 1)
+  )
+
+dplyr::left_join(a2_all, a5_all, by = "city")
+```
+
+
+
+
+
+
+
+
+
+
+
    
