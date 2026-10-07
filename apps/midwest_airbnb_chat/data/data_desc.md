@@ -18,7 +18,26 @@
 | `name` | text | Listing title as shown on Airbnb (for example "Tiny Studio Apartment 94 Walk Score"). Never empty. |
 | `price` | real | Nightly price in U.S. dollars on the snapshot date, with the dollar sign and commas removed. Ranges from 2.56 to 11,412; never `NULL` (rows without a price were dropped). |
 | `room_type` | text | Airbnb's four listing categories: `Entire home/apt` (11,652 rows), `Private room` (2,951), `Hotel room` (246), or `Shared room` (38). |
-
-Continue the table for the remaining 23 columns (Assignment 05): `host_id`, `host_name`, `host_since`, `host_is_superhost`, `neighbourhood`, `latitude`, `longitude`, `property_type`, `accommodates`, `bedrooms`, `beds`, `bathrooms_text`, `minimum_nights`, `availability_365`, `number_of_reviews`, `number_of_reviews_ltm`, `first_review`, `last_review`, `review_scores_rating`, `reviews_per_month`, `instant_bookable`, `estimated_revenue_l365d`, `amenities_count`.
-
-Two hints: `neighbourhood` is Inside Airbnb's `neighbourhood_cleansed` column, and `amenities_count` is not an Inside Airbnb column; it was computed for this course as the number of items in each listing's `amenities` list. Everything else keeps its Inside Airbnb name, so the data dictionary linked above explains it.
+| `host_id` | text | Airbnb's unique identifier for the host |
+| `host_name` | text | First name of the host |
+| `host_since` | text | Date the host created their Airbnb account (YYYY-MM-DD) |
+| `host_is_superhost` | text | Boolean flag indicating if host is a Superhost (`t` for true, `f` for false) |
+| `neighbourhood` | text | Cleaned neighborhood name derived from primary location data |
+| `latitude` | real | Latitude coordinate of the listing in decimal degrees |
+| `longitude` | real | Longitude coordinate of the listing in decimal degrees |
+| `property_type` | text | Categorical description of accommodation type (e.g., `Entire rental unit`, `Private room in home`) |
+| `accommodates` | integer | Maximum capacity of total guests allowed |
+| `bedrooms` | integer | Total number of dedicated bedrooms |
+| `beds` | integer | Total number of bed options provided |
+| `bathrooms_text` | text | Raw text string describing bathroom count and type (e.g., `1 bath`, `2.5 shared baths`) |
+| `bathrooms` | real | Numeric count of total bathrooms |
+| `minimum_nights` | integer | Minimum duration of stay required in nights |
+| `maximum_nights` | integer | Maximum allowed stay duration in nights |
+| `number_of_reviews` | integer | Cumulative total review count for the listing |
+| `number_of_reviews_ltm` | integer | Total review count received in the last twelve months |
+| `number_of_reviews_l30d` | integer | Total review count received in the last thirty days |
+| `review_scores_rating` | real | Overall average guest review score rating (0–5 scale) |
+| `review_scores_value` | real | Average rating guest review score for value (0–5 scale) |
+| `reviews_per_month` | real | Historical average number of review submissions per month |
+| `calculated_host_listings_count` | integer | Total count of active listings managed by the same host |
+| `availability_365` | integer | Total number of available days to reserve within the next 365 days |
