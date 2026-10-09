@@ -75,3 +75,17 @@ Then open http://localhost:7860.
 ## Course Information
 
 This application was developed for **ISA 401** at **Miami University**. The polished version of the same idea, built on BLS wage data, is the [OEWS Jobs Explorer](https://huggingface.co/spaces/fmegahed/querychat_demo).
+
+
+
+---
+
+## Live Application & Queries
+
+**Deployed Application:** [https://midwest-airbnb-chat-3bk2.onrender.com](https://midwest-airbnb-chat-3bk2.onrender.com)
+
+### Query 1: Top Listings
+![What are the top 5 rated listings in Columbus](screenshot1.png)
+
+
+
