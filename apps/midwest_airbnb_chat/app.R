@@ -21,13 +21,12 @@ qc = querychat::querychat(
   extra_instructions = "data/extra_instructions.md"
 )
 
-
-ui = page_sidebar(
+ui = bslib::page_sidebar(
   title = "Midwest Airbnb Explorer",
-  theme = bs_theme(bootswatch = "flatly"),
-  sidebar = sidebar(
+  theme = bslib::bs_theme(bootswatch = "flatly"),
+  sidebar = bslib::sidebar(
     title = "About & SQL",
-    "Query 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities.",
+    p("Query 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities."),
     hr(),
     qc$ui_sql()
   ),
@@ -39,4 +38,4 @@ server = function(input, output, session) {
 }
 
 options(shiny.host = "0.0.0.0", shiny.port = as.integer(Sys.getenv("PORT", "7860")))
-qc$app()
+shinyApp(ui, server)
