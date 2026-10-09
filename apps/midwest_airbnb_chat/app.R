@@ -14,7 +14,7 @@ client = ellmer::chat_openai(
   params = ellmer::params(reasoning_effort = "none")
 )
 
-# 3. Querychat Instance with greeting, data description, and extra instructions
+# 3. Querychat Instance
 qc = querychat::querychat(
   con, "listings",
   client             = client,
@@ -24,19 +24,19 @@ qc = querychat::querychat(
   extra_instructions = "data/extra_instructions.md"
 )
 
-# 4. Custom UI using page_fillable + bslib components
-ui = page_fillable(
+# 4. Custom bslib Page with Sidebar Chat & SQL Panel
+ui = page_sidebar(
   title = "Midwest Airbnb Explorer",
   theme = bs_theme(bootswatch = "cerulean"),
-  layout_sidebar(
-    sidebar = sidebar(
-      title = "About",
-      p("Query 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities."),
-      hr(),
-      h5("SQL Output"),
-      qc$ui_sql
-    ),
-    qc$ui_chat
+  sidebar = sidebar(
+    title = "About",
+    p("Query 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities."),
+    hr(),
+    qc$sidebar()
+  ),
+  card(
+    card_header("SQL Query Output"),
+    qc$ui_sql
   )
 )
 
