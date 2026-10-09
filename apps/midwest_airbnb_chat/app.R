@@ -21,10 +21,17 @@ qc = querychat::querychat(
   extra_instructions = "data/extra_instructions.md"
 )
 
-# Use querychat's native page layout with custom title & theme
-ui = qc$page(
+# Custom bslib page layout using valid Shiny/querychat UI functions
+ui = page_sidebar(
   title = "Midwest Airbnb Explorer",
-  theme = bs_theme(bootswatch = "cerulean")
+  theme = bs_theme(bootswatch = "cerulean"),
+  sidebar = sidebar(
+    title = "About",
+    p("Query 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities."),
+    hr(),
+    qc$ui_sql
+  ),
+  qc$ui_chat
 )
 
 server = function(input, output, session) {
