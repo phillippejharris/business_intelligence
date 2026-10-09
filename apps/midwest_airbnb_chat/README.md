@@ -88,4 +88,9 @@ This application was developed for **ISA 401** at **Miami University**. The poli
 ![What are the top 5 rated listings in Columbus](screenshot1.png)
 
 
+## Query 2: Price comparison
+![What is the average nightly price in Chicago vs Columbus?](sreenshot2.png)
+
+
+
 
