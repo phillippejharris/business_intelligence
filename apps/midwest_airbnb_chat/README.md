@@ -92,5 +92,8 @@ This application was developed for **ISA 401** at **Miami University**. The poli
 ![What is the average nightly price in Chicago vs Columbus?](sreenshot2.png)
 
 
+## Query 3: Neighborhood Distribution 
+![How many listings are there in each Twin Cities neighborhood?](screenshot3.png)
+
 
 
