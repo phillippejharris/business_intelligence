@@ -14,18 +14,36 @@ client = ellmer::chat_openai(
 
 qc = querychat::querychat(
   con, "listings",
-  client             = client,
-  tools              = c("filter", "query", "visualize"),
-  greeting           = "Ask me about 14,887 Airbnb listings in Chicago, Columbus, and the Twin Cities.",
-  data_description   = "data/data_desc.md",
-  extra_instructions = "data/extra_instructions.md",
-  title              = "Midwest Airbnb Explorer",
-  theme              = bs_theme(bootswatch = "cerulean")
+  client           = client,
+  tools            = c("filter", "query", "visualize"),
+  greeting         = "Ask me about 14,887 Airbnb listings in Chicago, Columbus, and the Twin Cities.",
+  data_description = "data/data_desc.md",
+  extra_instructions = "data/extra_instructions.md"
 )
+
+ui = page_sidebar(
+  title = "Midwest Airbnb Explorer",
+  theme = bs_theme(bootswatch = "cerulean"),
+  sidebar = sidebar(
+    title = "About",
+    p("Query 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities."),
+    accordion(
+      accordion_panel(
+        "SQL Query",
+        qc$ui_sql()
+      )
+    )
+  ),
+  qc$ui_chat()
+)
+
+server = function(input, output, session) {
+  qc$server()
+}
 
 options(
   shiny.host = "0.0.0.0", 
   shiny.port = as.integer(Sys.getenv("PORT", "7860"))
 )
 
-qc$app()
+shinyApp(ui, server)
