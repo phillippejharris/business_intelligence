@@ -21,12 +21,19 @@ qc = querychat::querychat(
   extra_instructions = "data/extra_instructions.md"
 )
 
+# Render UI using querychat's native ui layout while setting title & theme
+ui = qc$ui(
+  title = "Midwest Airbnb Explorer",
+  theme = bs_theme(bootswatch = "cerulean")
+)
+
+server = function(input, output, session) {
+  qc$server()
+}
+
 options(
   shiny.host = "0.0.0.0", 
   shiny.port = as.integer(Sys.getenv("PORT", "7860"))
 )
 
-qc$app(
-  title = "Midwest Airbnb Explorer",
-  theme = bs_theme(bootswatch = "cerulean")
-)
+shinyApp(ui, server)
