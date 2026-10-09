@@ -24,19 +24,21 @@ qc = querychat::querychat(
   extra_instructions = "data/extra_instructions.md"
 )
 
-# 4. Custom bslib Page with Sidebar Chat & SQL Panel
-ui = page_sidebar(
+# 4. UI with bslib theme, title, and querychat layout
+ui = page_navbar(
   title = "Midwest Airbnb Explorer",
   theme = bs_theme(bootswatch = "cerulean"),
-  sidebar = sidebar(
-    title = "About",
-    p("Query 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities."),
-    hr(),
-    qc$sidebar()
-  ),
-  card(
-    card_header("SQL Query Output"),
-    qc$ui_sql
+  nav_panel(
+    "Chat",
+    layout_sidebar(
+      sidebar = sidebar(
+        title = "About",
+        p("Query 14,887 Airbnb listings across Chicago, Columbus, and the Twin Cities."),
+        hr(),
+        qc$ui_sql
+      ),
+      qc$ui_chat
+    )
   )
 )
 
