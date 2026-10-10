@@ -1,0 +1,70 @@
+---
+title: "Assignment 07"
+author: "Jontae Harris"
+date: "2026-10-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(rvest)
+library(dplyr)
+library(tidyr)
+
+departments <- c(
+  "Accountancy", 
+  "Economics", 
+  "Entrepreneurship", 
+  "Finance", 
+  "Information Systems & Analytics", 
+  "Marketing", 
+  "Management"
+)
+
+urls <- c(
+  "https://miamioh.edu/fsb/directory/?up=/query/all/all/Accountancy/all",
+  "https://miamioh.edu/fsb/directory/?up=/query/all/all/Economics/all",
+  "https://miamioh.edu/fsb/directory/?up=/query/all/all/Entrepreneurship/all",
+  "https://miamioh.edu/fsb/directory/?up=/query/all/all/Finance/all",
+  "https://miamioh.edu/fsb/directory/?up=/query/all/all/Information%20Systems%20--%20Analytics/all",
+  "https://miamioh.edu/fsb/directory/?up=/query/all/all/Marketing/all",
+  "https://miamioh.edu/fsb/directory/?up=/query/all/all/Management/all"
+)
+
+dept_list <- list()
+
+for (i in 1:length(departments)) {
+  
+  dept_page <- rvest::read_html(urls[i])
+  
+  dept_page |> 
+    rvest::html_elements("tr > td:nth-child(3) a") |> 
+    rvest::html_text2() -> names
+  
+  dept_page |> 
+    rvest::html_elements("tr > td:nth-child(3) a") |> 
+    rvest::html_attr("href") |> 
+    rvest::url_absolute(base = urls[i]) -> websites
+  
+  dept_page |> 
+    rvest::html_elements("tr > td:nth-child(3)") |> 
+    rvest::html_text2() -> full_person_text
+  
+  positions <- stringr::str_remove(full_person_text, fixed(names)) |> stringr::str_trim()
+  
+  dept_list[[i]] <- data.frame(
+    department = departments[i],
+    name = names,
+    position = positions,
+    website = websites
+  )
+}
+
+fsb_directory <- dplyr::bind_rows(dept_list)
+
+head(fsb_directory)
+```
+
