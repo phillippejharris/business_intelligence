@@ -1,0 +1,174 @@
+---
+title: "Exam 1"
+author: "Jontae Harris"
+date: "2026-10-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+penguins = readr::read_csv("https://raw.githubusercontent.com/fmegahed/isa401/main/data/penguin_captures.csv")
+head(penguins)
+
+penguins |> 
+  dplyr::count(species)
+```
+
+
+```{r}
+campus <- jsonlite::fromJSON("https://isa401-find-your-seat.vercel.app/campus.json")
+
+library(jsonlite)
+library(dplyr)
+library(purrr)
+
+# Read the campus JSON file
+campus_data <- fromJSON("https://isa401-find-your-seat.vercel.app/campus.json")
+
+# Filter for Farmer School of Business and extract floor 1 sections
+fsb_data <- campus_data$buildings %>%
+  filter(name == "Farmer School of Business")
+
+# Unnest floors and rooms to count total class sections on floor 1
+floor1_rooms <- fsb_data$floors[[1]] %>%
+  filter(floor == 1)
+
+total_sections <- sum(sapply(floor1_rooms$rooms[[1]]$sections, length))
+print(total_sections)
+
+```
+
+```{r}
+library(httr2)
+
+resp <- request("https://data.cincinnati-oh.gov/resource/rvmt-pkmq.json") |>
+  req_url_query(
+    `$select` = "count(*) AS n",
+    `$where` = "crashdate >= '2026-07-01T00:00:00' AND crashdate < '2026-08-01T00:00:00'"
+  ) |>
+  req_perform() |>
+  resp_body_json()
+
+as.integer(resp[[1]]$n)
+```
+
+```{r Game}
+library(rvest)
+library(dplyr)
+library(readr)
+library(stringr)
+
+# 1. Setup Base URL and Pagination Sequence
+# Update 'to = ' with the last page start number based on total wrecks
+base_url <- "https://isa401-salvage.vercel.app/exam/registry?start="
+starts <- seq(from = 1, to = 321, by = 40) # Adjust 321 if total wrecks differs
+
+# 2. Scrape across all pages
+pages <- vector("list", length(starts))
+
+for (i in seq_along(starts)) {
+  pg <- read_html(paste0(base_url, starts[i]))
+  
+  pages[[i]] <- data.frame(
+    # Extract class name and clean label/whitespace
+    class = pg |> 
+      html_elements("div > ul > li:nth-child(1) > span") |> 
+      html_text2() |> 
+      str_remove("Class:\\s*") |> 
+      str_trim(),
+    
+    # Extract value as numeric
+    value = pg |> 
+      html_elements("div > ul > li:nth-child(3) > span") |> 
+      html_text2() |> 
+      parse_number()
+  )
+  
+  Sys.sleep(1) # Polite scraping pause
+}
+
+# 3. Combine into single data frame
+registry <- bind_rows(pages)
+
+# Answer to Part 2: Extract vector of all classes
+classes <- registry$class
+
+# Answer to Part 3: Count Dreadnoughts
+dreadnought_count <- sum(registry$class == "Dreadnought")
+print(dreadnought_count)
+
+
+library(rvest)
+library(dplyr)
+library(readr)
+library(stringr)
+
+# 1. Setup Base URL and Pagination Sequence
+base_url <- "https://isa401-salvage.vercel.app/exam/registry?start="
+starts <- seq(from = 1, to = 321, by = 40)
+
+# 2. Scrape across all pages
+pages <- vector("list", length(starts))
+
+for (i in seq_along(starts)) {
+  pg <- read_html(paste0(base_url, starts[i]))
+  
+  pages[[i]] <- data.frame(
+    class = pg |> 
+      html_elements("div > ul > li:nth-child(1) > span") |> 
+      html_text2() |> 
+      str_remove("Class:\\s*") |> 
+      str_trim(),
+    
+    value = pg |> 
+      html_elements("div > ul > li:nth-child(3) > span") |> 
+      html_text2() |> 
+      parse_number()
+  )
+  
+  Sys.sleep(1) # Polite scraping pause
+}
+
+# 3. Combine into data frame and extract the 'classes' vector
+registry <- bind_rows(pages)
+classes <- registry$class
+
+
+```
+
+```{r}
+library(ellmer)
+
+# 1. Create a chat object
+chat <- chat_openai(
+  model = "gpt-5.6-luna"
+)
+
+# 2. Define the Airbnb listing description
+description <- "This one of a kind, turn of the century, fully restored mansion is just waiting for you to come and enjoy the vast amenities this house offers! This historic Victorian Mansion was built in the last 1800's and has been fully restored and updated with one thing in mind--luxury! We boast a slate pool table, 10 person hot tub, a custom made fire table, a built in giant projector screen for streaming, arcade games, and much much more! We comfortably sleep 19 guests with 9 dedicated bedrooms."
+
+# 3. Extract structured information
+result <- chat$chat_structured(
+  description,
+  type = type_object(
+    property_type = type_string(
+      description = "The type of property, e.g., Mansion, Apartment, House"
+    ),
+    max_guests = type_integer(
+      description = "The maximum number of guests the property sleeps"
+    ),
+    num_bedrooms = type_integer(
+      description = "The number of dedicated bedrooms"
+    ),
+    key_amenities = type_string(
+      description = "List key amenities separated by |"
+    )
+  )
+)
+
+# 4. Display results
+print(result)

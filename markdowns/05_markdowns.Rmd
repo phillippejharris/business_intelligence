@@ -38,6 +38,9 @@ sec_floor = fsb[[8]]$`2`
 sec_floor_rooms = sec_floor[[3]]
 sec_floor_rooms[6, 2] # by position 
 sec_floor_rooms[6, 'isa_sections'] # by name
+campus$Farmer[[8]]$`2`[[3]][6, "isa_sections"]
+
+sum(sapply(campus$Farmer$floors$`1`$rooms$isa_sections, nrow))
 ```
 
 
