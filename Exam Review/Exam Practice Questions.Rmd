@@ -1,0 +1,243 @@
+---
+title: "Practice Exam"
+author: "Jontae Harris"
+date: "2026-10-10"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Question 3
+```{r}
+lst = list( 
+  gdp = data.frame(year = c(2020, 2021, 2022), values = c(19200, 20500, 21300), units = "USD billions" ),
+  population = list(country = "United States", year = c(2020, 2021, 2022), values = c(325, 331, 335), units = "millions"),
+  indicators = c("gdp", "population", "inflation")) # Available indicators
+  inflation_rate = 3.2
+  # Latest inflation rate as a single value
+  
+  print(lst)
+```
+
+
+## Question 4 
+
+```{r}
+# Load the jsonlite package
+library(jsonlite)
+
+# Read and parse the JSON file
+hbip <- fromJSON("hibp_data.json")
+
+# Get the total number of observations (rows)
+total_observations <- nrow(hbip)
+
+# Print the result
+print(total_observations)
+
+```
+
+## Question 5
+```{r}
+library(jsonlite)
+hbip <- fromJSON("hibp_data.json")
+
+# Check the BreachName/Name at row 500
+hbip$Name[500] 
+# OR if the column is named BreachName:
+hbip$BreachName[500]
+```
+
+## Question 6 
+
+```{r}
+library(jsonlite)
+
+# 1. Load the JSON data
+hbip <- fromJSON("hibp_data.json")
+
+# 2. Count any row containing "miamioh.edu" anywhere
+sum(apply(hbip, 1, function(row) any(grepl("miamioh.edu", row, ignore.case = TRUE))))
+
+# Filter the rows into a new dataframe
+# Line 68-69
+miami_emails <- hbip |> 
+  dplyr::filter(stringr::str_detect(Email, stringr::regex("miamioh.edu", ignore_case = TRUE)))
+# Get the number of observations
+nrow(miami_emails)
+
+
+```
+
+
+
+## Question 8
+```{r}
+library(rvest)
+library(dplyr)
+library(stringr)
+
+# URL for the Miami Swimming and Diving Roster page
+url <- "https://miamiredhawks.com/sports/swimming-and-diving/roster"
+
+page <- rvest::read_html(url)
+
+# 1. Grab all person details containers
+cards <- page |> 
+  rvest::html_elements(".s-person-card")
+
+# 2. Extract names and locations per card
+names <- cards |> 
+  rvest::html_element("h3") |> 
+  rvest::html_text2()
+
+locations <- cards |> 
+  rvest::html_element(".s-person-details__bio-stats") |> 
+  rvest::html_text2()
+
+# 3. Build data frame and filter out non-athlete/duplicate rows
+swim_df <- dplyr::tibble(
+  name = names,
+  location = locations
+) |> 
+  dplyr::filter(!is.na(name) & name != "") |> 
+  dplyr::distinct(name, .keep_all = TRUE) |> 
+  dplyr::mutate(
+    # Clean location text to strip out High School or extra details if present
+    location = stringr::str_split_i(location, "\n", 1)
+  )
+
+# View the result
+head(swim_df)
+```
+
+## Question 8 
+```{r}
+library(rvest)
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+url <- "https://miamioh.edu/policy-library/students/undergraduate/academic-regulations/index.html"
+
+page <- rvest::read_html(url)
+
+page |>
+  rvest::html_elements("main a") |>
+  rvest::html_attr("href") |>
+  rvest::url_absolute(base = url) -> mu_policies
+
+mu_policies <- unique(mu_policies)
+
+mu_policies
+```
+
+
+## Question 9 
+```{r}
+library(rvest)
+library(dplyr)
+library(stringr)
+
+# URL for the Miami Swimming and Diving Roster page
+url <- "https://miamiredhawks.com/sports/swimming-and-diving/roster"
+
+page <- rvest::read_html(url)
+
+# 1. Grab all person details containers
+cards <- page |> 
+  rvest::html_elements(".s-person-card")
+
+# 2. Extract names and locations per card
+names <- cards |> 
+  rvest::html_element("h3") |> 
+  rvest::html_text2()
+
+locations <- cards |> 
+  rvest::html_element(".s-person-details__bio-stats") |> 
+  rvest::html_text2()
+
+# 3. Build data frame and filter out non-athlete/duplicate rows
+swim_df <- dplyr::tibble(
+  name = names,
+  location = locations
+) |> 
+  dplyr::filter(!is.na(name) & name != "") |> 
+  dplyr::distinct(name, .keep_all = TRUE) |> 
+  dplyr::mutate(
+    # Clean location text to strip out High School or extra details if present
+    location = stringr::str_split_i(location, "\n", 1)
+  )
+
+# View the result
+head(swim_df)
+```
+
+
+## Question 11 
+```{r}
+library(httr2)
+library(jsonlite)
+library(dplyr)
+library(purrr)
+
+# 1. Read the CSV file containing the toxic IP addresses
+ips <- read.csv("toxic_ips_oct2025.csv")
+
+# Ensure we have a vector of IP addresses (assuming the column name is 'ip' or using the first column)
+ip_list <- ips[[1]]
+
+# 2. Define the specific fields requested by ip-api.com
+fields_query <- "status,continent,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,currency,isp,org,as,query"
+
+# 3. Query the ip-api.com JSON endpoint for each IP address
+ip_data_list <- purrr::map(ip_list, function(ip) {
+  url <- paste0("http://ip-api.com/json/", ip, "?fields=", fields_query)
+  jsonlite::fromJSON(url)
+})
+
+# 4. Bind all rows into a 10-row by 17-column data frame named ip_df
+ip_df <- dplyr::bind_rows(ip_data_list)
+
+# View the result
+head(ip_df)
+
+
+## or with For fucntion 
+
+library(jsonlite)
+library(dplyr)
+
+# 1. Read the CSV file containing the toxic IP addresses
+ips <- read.csv("toxic_ips_oct2025.csv")
+ip_list <- ips[[1]]
+
+# 2. Define the specific fields requested by ip-api.com
+fields_query <- "status,continent,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,currency,isp,org,as,query"
+
+# 3. Initialize an empty list to hold the API response for each IP
+results_list <- list()
+
+# 4. Loop through each IP address by its index
+for (i in 1:length(ip_list)) {
+  # Construct the API request URL for the current IP
+  url <- paste0("http://ip-api.com/json/", ip_list[i], "?fields=", fields_query)
+  
+  # Fetch JSON and store the converted result at index 'i' in the list
+  results_list[[i]] <- jsonlite::fromJSON(url)
+}
+
+# 5. Combine the list of 10 individual responses into a single 10x17 data frame
+ip_df <- dplyr::bind_rows(results_list)
+
+# Verify dimensions (10 rows, 17 columns)
+dim(ip_df)
+```
+
+
+
