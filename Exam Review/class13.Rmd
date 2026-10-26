@@ -1,0 +1,67 @@
+---
+title: 'Class 13: Tidy and Technically Correct Data'
+author: "Fadel M Megahed"
+date: "`r Sys.Date()`"
+output:
+  word_document:
+    toc: true
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_download: true
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Tidying and Having Technically Correct Data from the PlaneCrash Info Site
+
+```{r crashes}
+year = 2025
+
+crash_url = paste0('https://www.planecrashinfo.com/', year, '/', year, '.htm')
+
+# the encoding came from chatisa as shown in class 12
+crash_page <- rvest::read_html(crash_url, encoding = "ISO-8859-1")
+
+crash_page |> 
+  # selector from inspector (kept the last three parts of the selector)
+  # note the output (we also dropped :nth-child(8) in tr since we want all rows)
+  rvest::html_elements("tr > td:nth-child(1) > font") |> 
+  rvest::html_text2() -> date_col
+
+crash_page |> 
+  # repeat for location_operator
+  rvest::html_elements("tr > td:nth-child(2) > font") |> 
+  rvest::html_text2() -> location_operator
+
+crash_page |> 
+  # repeat for aircraft_reg
+  rvest::html_elements("tr > td:nth-child(3) > font") |> 
+  rvest::html_text2() -> aircraft_reg
+
+crash_page |> 
+  # repeat for fatalities
+  rvest::html_elements("tr > td:nth-child(4) > font") |> 
+  rvest::html_text2() -> fatalities
+
+# note that the number elements in the four vectors are not equal
+df = data.frame(
+  date_col = date_col, 
+  # -1 drops the first row that had the col header
+  location_operator = location_operator[-1],
+  aircraft_reg = aircraft_reg[-1],
+  fatalities = fatalities[-1]
+)
+
+# make this tidy
+
+df |> 
+  tidyr::separate(col = location_operator, into = c("location", "operator"), sep = "\n") |> 
+  tidyr::separate(col = aircraft_reg, into = c("aircraft", "registeration"), sep = "\n") |> 
+  tidyr::separate(col = fatalities, into = c("air_fatalities", "num_pass", "ground_fatalities")) -> tidy_df
+```
+
